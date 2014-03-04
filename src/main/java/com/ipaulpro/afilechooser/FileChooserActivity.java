@@ -70,13 +70,23 @@ public class FileChooserActivity extends FragmentActivity implements
         mFragmentManager.addOnBackStackChangedListener(this);
 
         if (savedInstanceState == null) {
-            mPath = EXTERNAL_BASE_PATH;
+            mPath = getRootStorageDirectory();
             addFragment();
         } else {
             mPath = savedInstanceState.getString(PATH);
         }
 
         setTitle(mPath);
+    }
+
+    private String getRootStorageDirectory() {
+        String path = EXTERNAL_BASE_PATH;
+        File storage = new File(path);
+        File parent = storage.getParentFile();
+        if(storage.canRead()) {
+            return parent.getAbsolutePath();
+        }
+        return path;
     }
 
     @Override
